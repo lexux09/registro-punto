@@ -34,17 +34,35 @@
   .err{color:var(--baja);font-size:13px;text-align:center;min-height:18px;margin-top:10px}
 
   #app{display:none;max-width:1600px;margin:0 auto;padding:18px 28px}
+  #app.shown{display:block}
   header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px}
   header h2{margin:0;font-size:20px}
   .badge{font-size:12px;background:var(--card2);padding:4px 10px;border-radius:20px;color:var(--muted);margin-left:8px}
   .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 
-  .userbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px}
-  .userbar .uinfo{display:flex;align-items:center;gap:10px}
-  .userbar .badge{margin:0;font-size:13px;background:var(--accent);color:#fff;font-weight:700}
-  .userbar h3{margin:0 0 0 auto;font-size:18px;text-transform:uppercase}
-  .nav-btns{display:flex;gap:8px}
-  .nav-btns button{padding:8px 14px}
+  .userbar{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;overflow-x:auto;margin-bottom:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 12px}
+  .userbar .uinfo{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .userbar .badge{margin:0;font-size:13px;background:var(--accent);color:#fff;font-weight:700;white-space:nowrap}
+  .userbar h3{margin:0 0 0 auto;font-size:17px;text-transform:uppercase;white-space:nowrap;flex:0 0 auto}
+  .nav-btns{display:flex;gap:6px;flex:0 0 auto}
+  .nav-btns button{padding:8px 12px;white-space:nowrap}
+  .nav-btns .short,#monthLbl .short{display:none}
+
+  #calwrap{overflow-x:auto;cursor:grab}
+  #calwrap.grabbing{cursor:grabbing;user-select:none}
+  .bottombar{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:10px}
+  .bottombar button{flex:1;background:var(--card);color:var(--txt);border-radius:0;padding:14px 6px;font-size:15px;font-weight:700}
+  .bottombar button.act{color:#fff;background:var(--accent)}
+  .brush-indicator{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--accent);color:#fff;padding:9px 16px;font-size:14px;border-radius:10px;margin-top:10px}
+  .brush-indicator button{background:rgba(255,255,255,.2);color:#fff;padding:6px 12px}
+
+  .overlay.sheet{align-items:flex-end;padding:0}
+  .sheet-panel{background:var(--card);border-radius:16px 16px 0 0;padding:20px 18px 16px;width:100%;max-width:900px;margin:0 auto;box-shadow:0 -10px 30px rgba(0,0,0,.5);max-height:75vh;overflow:auto}
+  .sheet-panel h3{margin:0 0 12px}
+  .sheet-brush{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--card2);color:var(--txt);border:2px solid transparent;margin-top:8px;padding:12px 14px;font-weight:700}
+  .sheet-brush.active{border-color:#fff;box-shadow:0 0 0 2px var(--accent)}
+  .sheet-brush .sw{width:16px;height:16px;border-radius:5px;flex:0 0 auto}
+  .sheet-brush .bt{font-weight:600;color:var(--muted);font-size:12px}
 
   .weekdays,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
   .weekdays div{text-align:center;font-size:12px;color:var(--muted);font-weight:600;padding-bottom:4px;text-transform:uppercase}
@@ -67,7 +85,7 @@
   .entrybar .stime,.shiftbar .stime{font-size:10px;font-weight:600;color:inherit;opacity:.9;overflow-wrap:anywhere}
   .cellnote{flex:0 0 auto;font-size:10px;color:var(--muted);line-height:1.2;overflow-wrap:anywhere;padding:0 1px}
   .entrybar .plus,.shiftbar .plus{font-weight:800;opacity:1}
-  .shiftbar .sabbr{display:none;align-items:center;justify-content:center;width:100%;font-size:15px;font-weight:800;text-shadow:0 1px 1px rgba(0,0,0,.25)}
+  .shiftbar .sabbr,.entrybar .eabbr{display:none;align-items:center;justify-content:center;width:100%;font-size:15px;font-weight:800;text-shadow:0 1px 1px rgba(0,0,0,.25)}
   .detail-row{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px}
   .detail-row .sw{width:14px;height:14px;border-radius:4px;flex:0 0 auto}
   .detail-row b{min-width:78px;color:var(--muted);font-weight:600}
@@ -121,10 +139,21 @@
     .toolbar{width:100%;gap:6px}
     .toolbar button{flex:1;padding:9px 6px;font-size:13px}
     button{padding:9px 12px}
-    .userbar{padding:8px 10px;gap:8px}
-    .userbar h3{margin:0;width:100%;font-size:16px}
-    .nav-btns{width:100%}
-    .nav-btns button{flex:1;padding:9px 4px;font-size:13px}
+    .userbar{padding:7px 9px;gap:6px}
+    .userbar .badge{font-size:12px;padding:4px 8px}
+    .userbar h3{font-size:14px}
+    .nav-btns{gap:5px}
+    .nav-btns button{padding:8px 10px;font-size:14px}
+    .nav-btns .full{display:none}
+    .nav-btns .short{display:inline}
+    #monthLbl .full{display:none}
+    #monthLbl .short{display:inline}
+    /* calendario con celdas amplias y scroll lateral; menú pegado al final */
+    #app{padding:10px 10px 16px}
+    #calwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .weekdays,.grid{min-width:560px}
+    .grid{grid-auto-rows:120px}
+    .cell{min-height:0}
     .weekdays div{font-size:10px}
     .weekdays,.grid{gap:3px}
     .cell{min-height:78px;padding:4px;border-radius:8px;gap:2px}
@@ -146,10 +175,13 @@
     .palette .palmuted,.palette .palhint{display:none}
     .palrow{gap:6px}
     .brush{padding:6px 9px;font-size:12px}
-    /* turnos: solo abreviatura */
-    .shiftbar .sabbr{display:flex}
-    .shiftbar .sinfo{display:none}
-    .shiftbar{justify-content:center;padding:2px}
+    /* celdas: nombre completo adaptado y centrado (hora e info completa al tocar el día) */
+    .shiftbar .sabbr,.entrybar .eabbr{display:none}
+    .shiftbar .sinfo,.entrybar .sinfo{display:flex;align-items:center;width:100%}
+    .entrybar .stime,.shiftbar .stime{display:none}
+    .entrybar .sname,.shiftbar .sname{font-size:11px;line-height:1.05;text-align:center;width:100%;white-space:normal;overflow-wrap:break-word;hyphens:auto}
+    .shiftbar,.entrybar{justify-content:center;padding:3px 2px}
+    .cell .cellnote{display:none}
   }
   @media(max-width:400px){
     .cell{min-height:70px}
@@ -211,31 +243,48 @@
       <select id="empSelect" style="width:auto;display:none" onchange="activeBrush=null;renderPalette();render()"></select>
     </div>
     <div class="nav-btns">
-      <button class="btn-ghost" onclick="changeMonth(-1)">‹ Anterior</button>
+      <button class="btn-ghost" onclick="changeMonth(-1)"><span class="full">‹ Anterior</span><span class="short">‹</span></button>
       <button class="btn-ghost" onclick="goToday()">Hoy</button>
-      <button class="btn-ghost" onclick="changeMonth(1)">Siguiente ›</button>
+      <button class="btn-ghost" onclick="changeMonth(1)"><span class="full">Siguiente ›</span><span class="short">›</span></button>
     </div>
     <h3 id="monthLbl"></h3>
   </div>
 
   <div id="warnBanner" style="display:none;background:#7c2d12;border:1px solid #f59e0b;color:#fed7aa;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:14px;font-weight:600"></div>
 
-  <div class="palette" id="palette"></div>
-
-  <div class="weekdays">
-    <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
-  </div>
-  <div class="grid" id="grid"></div>
-
-  <div class="legend" id="legend"></div>
-  <div class="summary" id="summary"></div>
-
-  <div class="fab" id="fab">
-    <div class="fab-menu" id="fabMenu">
-      <button onclick="openEstMgr();closeFab()">Añadir estado</button>
-      <button onclick="openShiftMgr();closeFab()">Añadir turno</button>
+  <div id="calwrap">
+    <div class="weekdays">
+      <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
     </div>
-    <button class="fab-main" onclick="toggleFab()" aria-label="Añadir">+</button>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="brush-indicator" id="brushIndicator" style="display:none"></div>
+
+  <div class="bottombar">
+    <button id="bbEstados" onclick="openBrushSheet('estado')">Estados</button>
+    <button id="bbTurnos" onclick="openBrushSheet('turno')">Turnos</button>
+    <button onclick="openMetrics()">Métricas</button>
+  </div>
+</div>
+
+<!-- HOJA DE PINCELES (Estados / Turnos) -->
+<div class="overlay sheet" id="brushSheetOverlay">
+  <div class="sheet-panel">
+    <h3 id="brushSheetTitle"></h3>
+    <div id="brushSheetList"></div>
+    <div class="modal-actions"><button class="btn-ghost" onclick="closeModal('brushSheetOverlay')">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- MÉTRICAS DEL MES -->
+<div class="overlay" id="metricsOverlay">
+  <div class="modal">
+    <h3>Métricas del mes</h3>
+    <div class="date-lbl" id="metricsMonth"></div>
+    <div class="summary" id="summary"></div>
+    <div class="legend" id="legend" style="margin-top:16px"></div>
+    <div class="modal-actions"><button class="btn-ghost" onclick="closeModal('metricsOverlay')">Cerrar</button></div>
   </div>
 </div>
 
@@ -357,6 +406,7 @@
 
 <script>
 const MONTHS=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const MONTHS_SHORT=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 const DOWN=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const DEFAULT_ESTADOS=[
   {id:"trabajo",name:"Trabajo",color:"#22c55e"},
@@ -433,7 +483,7 @@ function login(){
   if(!acc||acc.pass!==p){document.getElementById("loginErr").textContent="Usuario o contraseña incorrectos";return;}
   session={username:ukey,role:acc.role,name:acc.name,empresa:acc.empresa||""};
   document.getElementById("login").style.display="none";
-  document.getElementById("app").style.display="block";
+  document.getElementById("app").classList.add("shown");
   document.getElementById("roleBadge").textContent=acc.role==="admin"?"Administrador":acc.name;
   document.getElementById("usersBtn").style.display=acc.role==="admin"?"inline-block":"none";
   setupEmpSelect();
@@ -492,26 +542,53 @@ function eraseBtn(kind){
   const act=activeBrush&&activeBrush.kind===kind&&activeBrush.id==="erase"?" active":"";
   return '<button class="brush erase'+act+'" onclick="setBrush(\''+kind+'\',\'erase\')">Limpiar</button>';
 }
+function brushName(){
+  if(!activeBrush) return "";
+  if(activeBrush.id==="erase") return "Borrar";
+  if(activeBrush.kind==="estado") return (LS.estados().find(e=>e.id===activeBrush.id)||{}).name||"";
+  return ((LS.shifts()[currentEmp()]||[]).find(s=>s.id===activeBrush.id)||{}).name||"";
+}
+/* Indicador de pincel activo + estado de los botones inferiores */
 function renderPalette(){
-  const pal=document.getElementById("palette");
-  const estados=LS.estados().filter(e=>e.id!=="trabajo");
-  const shifts=LS.shifts()[currentEmp()]||[];
-  pal.style.display="flex";
-  let html='<div class="palrow"><span class="ptitle">Estados:</span>';
-  html+= estados.length ? estados.map(e=>brushBtn("estado",e.id,e.color,e.name)).join("")+eraseBtn("estado")
-                        : '<span class="palmuted">Cree estados en «Estados».</span>';
-  html+='</div><div class="palrow"><span class="ptitle">Turnos:</span>';
-  html+= shifts.length ? shifts.map(s=>brushBtn("turno",s.id,s.color,s.name,tramosTimeText(s))).join("")+eraseBtn("turno")
-                       : '<span class="palmuted">Cree turnos en «Turnos».</span>';
-  html+='</div>';
-  if(activeBrush) html+='<div class="palhint">Modo edición ('+(activeBrush.id==="erase"?"borrar":"aplicar")+'): pulse o arrastre sobre las fechas. Pulse de nuevo el botón para salir.</div>';
-  else html+='<div class="palmuted">Pulse un estado o turno y pinte las fechas (puede arrastrar). Sin selección, al pulsar un día se edita su horario.</div>';
-  pal.innerHTML=html;
+  const ind=document.getElementById("brushIndicator");
+  if(activeBrush){
+    ind.style.display="flex";
+    ind.innerHTML='<span>Pintando: <b>'+brushName()+'</b> — toque los días</span>'
+      +'<button onclick="setBrush(\''+activeBrush.kind+'\',\''+activeBrush.id+'\')">Salir</button>';
+  } else ind.style.display="none";
+  document.getElementById("bbEstados").classList.toggle("act",!!activeBrush&&activeBrush.kind==="estado");
+  document.getElementById("bbTurnos").classList.toggle("act",!!activeBrush&&activeBrush.kind==="turno");
   document.getElementById("grid").classList.toggle("brush-on",!!activeBrush);
 }
 function setBrush(kind,id){
   activeBrush=(activeBrush&&activeBrush.kind===kind&&activeBrush.id===id)?null:{kind,id};
   renderPalette();render();
+}
+/* Hoja inferior para elegir pincel */
+function openBrushSheet(kind){
+  const list=document.getElementById("brushSheetList");
+  document.getElementById("brushSheetTitle").textContent = kind==="estado"?"Estados — elija para pintar":"Turnos — elija para pintar";
+  const items = kind==="estado" ? LS.estados().filter(e=>e.id!=="trabajo") : (LS.shifts()[currentEmp()]||[]);
+  const mgr = kind==="estado"?"«Estados» (arriba)":"«Turnos» (arriba)";
+  if(!items.length){
+    list.innerHTML='<p style="color:var(--muted);font-size:13px">No hay '+(kind==="estado"?"estados":"turnos")+'. Créelos en '+mgr+'.</p>';
+  } else {
+    list.innerHTML=items.map(it=>{
+      const act=activeBrush&&activeBrush.kind===kind&&activeBrush.id===it.id?" active":"";
+      const bt=kind==="turno"?' <span class="bt">'+tramosTimeText(it)+'</span>':"";
+      return '<button class="sheet-brush'+act+'" onclick="pickBrush(\''+kind+'\',\''+it.id+'\')"><span class="sw" style="background:'+it.color+'"></span>'+it.name+bt+'</button>';
+    }).join("")
+    +'<button class="sheet-brush'+(activeBrush&&activeBrush.kind===kind&&activeBrush.id==="erase"?" active":"")+'" onclick="pickBrush(\''+kind+'\',\'erase\')"><span class="sw" style="background:#64748b"></span>Limpiar</button>';
+  }
+  document.getElementById("brushSheetOverlay").classList.add("show");
+}
+function pickBrush(kind,id){ setBrush(kind,id); closeModal("brushSheetOverlay"); }
+/* Métricas */
+function openMetrics(){
+  const y=viewDate.getFullYear(),m=viewDate.getMonth();
+  document.getElementById("metricsMonth").textContent=MONTHS[m]+" "+y;
+  render();
+  document.getElementById("metricsOverlay").classList.add("show");
 }
 
 /* ===== CALENDARIO ===== */
@@ -520,7 +597,7 @@ function goToday(){viewDate=new Date();render();}
 
 function render(){
   const y=viewDate.getFullYear(), m=viewDate.getMonth();
-  document.getElementById("monthLbl").textContent=MONTHS[m]+" "+y;
+  document.getElementById("monthLbl").innerHTML='<span class="full">'+MONTHS[m]+' '+y+'</span><span class="short">'+MONTHS_SHORT[m]+' '+y+'</span>';
   const emp=currentEmp();
   const data=LS.data(), sdata=LS.sdata();
   const shifts=(LS.shifts()[emp]||[]);
@@ -563,7 +640,10 @@ function render(){
       if(est||tr.length){
         const color=est?est.color:'#3b82f6';
         const th=recTimeHtml(rec);
-        inner+='<div class="entrybar" style="background:'+color+';color:'+textOn(color)+'"><span class="sinfo">'
+        const eab=est?(est.name.substring(0,3).toUpperCase()):"H";
+        inner+='<div class="entrybar" style="background:'+color+';color:'+textOn(color)+'">'
+          +'<span class="eabbr">'+eab+'</span>'
+          +'<span class="sinfo">'
           +(est?'<span class="sname">'+est.name+'</span>':'')
           +(th?'<span class="stime">'+th+'</span>':'')+'</span></div>';
       }
