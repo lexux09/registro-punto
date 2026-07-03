@@ -25,7 +25,11 @@
   .btn-ghost:hover{background:#34465f}
   .btn-danger{background:var(--baja);color:#fff;padding:8px 12px}
   .btn-mini{background:var(--card);color:var(--txt);padding:8px 12px}
-  input,select{background:var(--card2);border:1px solid var(--border);color:var(--txt);border-radius:8px;padding:10px;font-size:14px;width:100%}
+  input,select{background:var(--card2);border:1px solid var(--border);color:var(--txt);border-radius:8px;padding:10px;font-size:16px;width:100%;-webkit-appearance:none;appearance:none}
+  input[type="time"]{min-height:46px;line-height:1.2;color:var(--txt);-webkit-text-fill-color:var(--txt)}
+  input[type="color"]{-webkit-appearance:auto;appearance:auto}
+  .tramo-row{align-items:flex-start}
+  .tramo-row label{margin:0 0 5px}
   label{font-size:13px;color:var(--muted);display:block;margin:14px 0 6px}
 
   #login{display:flex;align-items:center;justify-content:center;min-height:100vh}
@@ -842,10 +846,10 @@ function addHTramoRow(entrada,salida){
   const cont=document.getElementById("hTramos");
   const row=document.createElement("div");
   row.className="tramo-row";
-  row.style.cssText="display:flex;gap:10px;align-items:flex-end;margin-top:8px";
+  row.style.cssText="display:flex;gap:10px;align-items:flex-start;margin-top:8px";
   row.innerHTML='<div style="flex:1"><label>Entrada</label><input type="time" class="hIn" value="'+(entrada||"")+'"></div>'
     +'<div style="flex:1"><label>Salida</label><input type="time" class="hOut" value="'+(salida||"")+'"></div>'
-    +'<button class="btn-danger" type="button" style="margin-bottom:1px" onclick="this.closest(\'.tramo-row\').remove()">Quitar</button>';
+    +'<button class="btn-danger" type="button" style="align-self:flex-end;min-height:46px" onclick="this.closest(\'.tramo-row\').remove()">Quitar</button>';
   cont.appendChild(row);
 }
 function resetHTramos(list){
@@ -1024,10 +1028,10 @@ function addTramoRow(entrada,salida){
   const cont=document.getElementById("sfTramos");
   const row=document.createElement("div");
   row.className="tramo-row";
-  row.style.cssText="display:flex;gap:10px;align-items:flex-end;margin-top:8px";
+  row.style.cssText="display:flex;gap:10px;align-items:flex-start;margin-top:8px";
   row.innerHTML='<div style="flex:1"><label>Entrada</label><input type="time" class="tIn" value="'+(entrada||"")+'"></div>'
     +'<div style="flex:1"><label>Salida</label><input type="time" class="tOut" value="'+(salida||"")+'"></div>'
-    +'<button class="btn-danger" type="button" style="margin-bottom:1px" onclick="this.closest(\'.tramo-row\').remove()">Quitar</button>';
+    +'<button class="btn-danger" type="button" style="align-self:flex-end;min-height:46px" onclick="this.closest(\'.tramo-row\').remove()">Quitar</button>';
   cont.appendChild(row);
 }
 function resetTramos(list){
