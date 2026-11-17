@@ -270,8 +270,10 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 .tb-addbtn{border:1px dashed var(--border2);background:var(--white);color:var(--text2);border-radius:6px;cursor:pointer;font-size:13px;padding:4px 8px;flex-shrink:0}
 .tb-addbtn.wide{width:100%}
 .tb-addbtn:hover{border-color:var(--red);color:var(--red)}
-.tb-newcard{display:flex;flex-direction:column;gap:5px;align-items:flex-start;justify-content:center;padding:12px;border:1px dashed var(--border2);border-radius:9px}
-.tb-newlabel{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);font-weight:600}
+.tb-newbtns{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.tb-drag{cursor:grab;color:var(--text3);font-size:12px;user-select:none;flex-shrink:0;letter-spacing:-2px}
+.tb-drag:active{cursor:grabbing}
+.tb-card.tb-over{outline:2px dashed var(--red);outline-offset:2px}
 /* ===== producción del día ===== */
 .prod{display:flex;flex-direction:column;gap:8px;margin:4px 0 14px;padding:10px;border:1px solid var(--border2);border-radius:9px;background:rgba(128,128,128,.04)}
 .prod-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -314,10 +316,10 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 /* ===== modal ===== */
 .ov{position:fixed;inset:0;background:rgba(20,30,55,.28);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}
 .ov.show{display:flex}
-.modal{background:var(--white);width:440px;max-width:100%;box-shadow:var(--shadow-lg);max-height:92vh;overflow:auto}
-.modal .mh{padding:14px 18px;border-bottom:1px solid var(--border);font-weight:600;display:flex;justify-content:space-between;align-items:center}
-.modal .mb{padding:16px 18px}
-.modal .mf{padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:space-between}
+.modal{background:var(--white);width:min(440px,96vw);max-width:96vw;box-shadow:var(--shadow-lg);max-height:94vh;display:flex;flex-direction:column;overflow:hidden;border-radius:12px}
+.modal .mh{padding:14px 18px;border-bottom:1px solid var(--border);font-weight:600;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal .mb{padding:16px 18px;overflow:auto;flex:1 1 auto;min-height:0}
+.modal .mf{padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:space-between;flex-shrink:0}
 .mrow{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--border)}
 .mrow:last-child{border-bottom:none}
 .tpl-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
@@ -402,7 +404,13 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
       <div class="note-list drop-zone" id="gen-pend" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,true)"></div>
     </div>
     <div class="card">
-      <div class="tb-links-head"><h2>Tablón</h2><span class="hint" style="margin:0 0 0 auto">Info útil siempre a mano</span></div>
+      <div class="tb-links-head"><h2>Tablón</h2>
+        <div class="tb-newbtns">
+          <button class="btn btn-sm" onclick="tbAddCard('contactos')">＋ Contactos</button>
+          <button class="btn btn-sm" onclick="tbAddCard('textos')">＋ Textos</button>
+          <button class="btn btn-sm" onclick="tbAddCard('libre')">＋ Libre</button>
+        </div>
+      </div>
       <div class="note-list" id="tablon"></div>
     </div>
   </div>
@@ -643,7 +651,7 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 
 <!-- ===== MODAL CALCULADORA DE PRECIOS ===== -->
 <div class="ov" id="ov-calc">
-  <div class="modal" style="max-width:600px">
+  <div class="modal" style="width:min(620px,96vw)">
     <div class="mh"><span>Calculadora de precios</span><button class="btn btn-sm btn-ghost" onclick="closeCalc()">×</button></div>
     <div class="mb">
       <div class="calc-head"><span>Neto(s)</span><span>Margen %</span><span>PVP</span><span></span></div>
@@ -659,7 +667,7 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 
 <!-- ===== MODAL ESCRIBIR NOTA DEL DÍA ===== -->
 <div class="ov" id="ov-noteedit">
-  <div class="modal" style="max-width:640px">
+  <div class="modal" style="width:min(760px,96vw)">
     <div class="mh"><span>Escribir nota del día</span><button class="btn btn-sm btn-ghost" onclick="closeNoteEditor()">×</button></div>
     <div class="mb"><div class="daypanel" id="daypanel"></div></div>
   </div>
@@ -667,7 +675,7 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 
 <!-- ===== MODAL NOTAS ARCHIVADAS ===== -->
 <div class="ov" id="ov-archive">
-  <div class="modal" style="max-width:640px">
+  <div class="modal" style="width:min(720px,96vw)">
     <div class="mh"><span>Notas archivadas</span><button class="btn btn-sm btn-ghost" onclick="closeArchive()">×</button></div>
     <div class="mb">
       <div class="hint">Notas concluidas y excluidas (del día y generales).</div>
@@ -1692,8 +1700,19 @@ function tbAddRowHtml(c){
   return '<div class="tb-addrow tb-addcol"><textarea id="tbl-txt-'+c.id+'" placeholder="Escribe…" rows="2"></textarea><button class="tb-addbtn wide" onclick="tbAddLibre(\''+c.id+'\')">＋ Añadir</button></div>';
 }
 function renderTablon(){ const box=document.getElementById('tablon'); if(!box)return;
-  box.innerHTML=DB.tablon.map(c=>'<div class="tb-card"><div class="tb-head"><input class="tb-title" value="'+esc(c.title)+'" onchange="tbRename(\''+c.id+'\',this.value)"><span class="tb-del" title="Eliminar tarjeta" onclick="tbDelCard(\''+c.id+'\')">×</span></div><div class="tb-items">'+tbItemsHtml(c)+'</div>'+tbAddRowHtml(c)+'</div>').join('')
-    +'<div class="tb-newcard"><div class="tb-newlabel">Nueva tarjeta</div><button class="btn btn-sm" onclick="tbAddCard(\'contactos\')">Contactos</button><button class="btn btn-sm" onclick="tbAddCard(\'textos\')">Textos útiles</button><button class="btn btn-sm" onclick="tbAddCard(\'libre\')">Libre</button></div>'; }
+  box.innerHTML=DB.tablon.map(c=>'<div class="tb-card" ondragover="tbDragOver(event,this)" ondragleave="this.classList.remove(\'tb-over\')" ondrop="tbDrop(event,\''+c.id+'\')">'+
+    '<div class="tb-head"><span class="tb-drag" draggable="true" title="Arrastra para mover" ondragstart="tbDragStart(event,\''+c.id+'\')" ondragend="tbDragEnd()">⋮⋮</span>'+
+    '<input class="tb-title" value="'+esc(c.title)+'" onchange="tbRename(\''+c.id+'\',this.value)"><span class="tb-del" title="Eliminar tarjeta" onclick="tbDelCard(\''+c.id+'\')">×</span></div>'+
+    '<div class="tb-items">'+tbItemsHtml(c)+'</div>'+tbAddRowHtml(c)+'</div>').join('')
+    || '<div class="tb-empty" style="grid-column:1/-1">Sin tarjetas. Usa ＋ Contactos / Textos / Libre arriba.</div>'; }
+let tbDrag=null;
+function tbDragStart(e,id){ tbDrag=id; e.dataTransfer.effectAllowed='move'; try{e.dataTransfer.setData('text/plain','');}catch(x){} }
+function tbDragOver(e,el){ if(tbDrag!=null){ e.preventDefault(); el.classList.add('tb-over'); } }
+function tbDragEnd(){ tbDrag=null; document.querySelectorAll('.tb-over').forEach(x=>x.classList.remove('tb-over')); }
+function tbDrop(e,id){ e.preventDefault(); if(tbDrag==null||tbDrag===id){ tbDragEnd(); return; }
+  const from=DB.tablon.findIndex(c=>c.id===tbDrag); const [m]=DB.tablon.splice(from,1);
+  const to=DB.tablon.findIndex(c=>c.id===id); DB.tablon.splice(to<0?DB.tablon.length:to,0,m);
+  tbDragEnd(); saveDB(); renderTablon(); }
 
 /* ===== PRODUCCIÓN DEL DÍA (tickets por marca + timeouts) ===== */
 function renderProd(){ const box=document.getElementById('prod-day'); if(!box)return; const p=dayProd(selDate); const tot=prodTicketsTotal(p);
