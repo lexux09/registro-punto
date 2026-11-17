@@ -258,8 +258,17 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 .tb-del{cursor:pointer;color:var(--text3);font-size:15px;line-height:1;padding:0 2px}
 .tb-del:hover{color:var(--red)}
 .tb-items{display:flex;flex-direction:column;gap:3px}
-.tb-item{display:flex;align-items:center;gap:6px;font-size:11.5px;padding:3px 4px;border-radius:5px;background:rgba(128,128,128,.05)}
+.tb-item{display:flex;align-items:center;gap:6px;font-size:11.5px;padding:4px 7px;border-radius:5px;background:rgba(128,128,128,.05)}
 .tb-item a{color:var(--red);text-decoration:none}
+.tb-click{cursor:pointer}
+.tb-click:hover{background:rgba(128,128,128,.14)}
+.tb-line{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-tel{flex-shrink:0;font-size:12px;color:var(--red)}
+.tbi-view{display:flex;flex-direction:column;gap:10px;font-size:14px}
+.tbi-view .tbi-k{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:2px}
+.tbi-view a{color:var(--red)}
+.tbi-vtit{font-size:16px;font-weight:700;margin-bottom:8px}
+.tbi-html{font-size:14px;line-height:1.6;white-space:pre-wrap}
 .tb-sub{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tb-x{cursor:pointer;color:var(--text3);font-size:11px;flex-shrink:0;padding:0 2px}
 .tb-x:hover{color:var(--red)}
@@ -670,6 +679,15 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
   <div class="modal" style="width:min(760px,96vw)">
     <div class="mh"><span>Escribir nota del día</span><button class="btn btn-sm btn-ghost" onclick="closeNoteEditor()">×</button></div>
     <div class="mb"><div class="daypanel" id="daypanel"></div></div>
+  </div>
+</div>
+
+<!-- ===== MODAL ELEMENTO DEL TABLÓN (visor/editor) ===== -->
+<div class="ov" id="ov-tbitem">
+  <div class="modal" style="width:min(620px,96vw)">
+    <div class="mh"><span id="tbi-title">Elemento</span><button class="btn btn-sm btn-ghost" onclick="closeTbItem()">×</button></div>
+    <div class="mb" id="tbi-body"></div>
+    <div class="mf" id="tbi-foot"></div>
   </div>
 </div>
 
@@ -1684,15 +1702,40 @@ function tbAddTexto(cid){ const c=tbCardById(cid); const ti=document.getElementB
   c.items.push({id:tbNewId('t'),titulo:titu||texto.slice(0,24),texto:texto}); saveDB(); renderTablon(); }
 function tbAddLibre(cid){ const c=tbCardById(cid); const tx=document.getElementById('tbl-txt-'+cid); const texto=(tx.value||'').trim(); if(!texto){ toast('Escribe algo'); return; }
   c.items.push({id:tbNewId('l'),texto:texto}); saveDB(); renderTablon(); }
-function tbEditItem(cid,iid,field){ const c=tbCardById(cid); const it=c&&c.items.find(x=>x.id===iid); if(!it)return;
-  const cur=it[field]||''; const v=prompt('Editar:', cur); if(v===null)return; it[field]=v.trim(); if(c.type==='textos'&&field==='texto'&&!it.titulo)it.titulo=v.trim().slice(0,24); saveDB(); renderTablon(); }
-function tbCopy(cid,iid){ const c=tbCardById(cid); const it=c&&c.items.find(x=>x.id===iid); if(!it)return; const txt=it.texto||'';
-  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(()=>toast('Texto copiado')).catch(()=>toast('No se pudo copiar')); } else { try{const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('Texto copiado');}catch(e){toast('No se pudo copiar');} } }
+function tbPlain(html){ const d=document.createElement('div'); d.innerHTML=html||''; return (d.textContent||'').replace(/\s+/g,' ').trim(); }
+function tbItemLabel(c,it){ if(c.type==='contactos') return it.nombre||it.tel||'—'; if(c.type==='textos') return it.titulo||tbPlain(it.texto).slice(0,44)||'—'; return tbPlain(it.texto).slice(0,44)||'—'; }
+/* --- visor/editor de elemento del tablón (igual que una nota) --- */
+let tbiCard=null, tbiId=null, tbiMode='view';
+function tbItemCur(){ const c=tbCardById(tbiCard); const it=c&&c.items.find(x=>x.id===tbiId); return {c,it}; }
+function tbOpenItem(cid,iid){ tbiCard=cid; tbiId=iid; tbiMode='view'; renderTbItem(); document.getElementById('ov-tbitem').classList.add('show'); }
+function closeTbItem(){ document.getElementById('ov-tbitem').classList.remove('show'); }
+function tbItemEdit(){ tbiMode='edit'; renderTbItem(); }
+function tbItemDelete(){ const {c,it}=tbItemCur(); if(!c||!it)return; if(!confirm('¿Eliminar este elemento?'))return; c.items=c.items.filter(x=>x.id!==tbiId); saveDB(); closeTbItem(); renderTablon(); }
+function tbFmt(cmd){ document.execCommand(cmd,false,null); const e=document.getElementById('tbi-editor'); if(e)e.focus(); }
+function tbEditorToolbar(){ return '<button type="button" class="tb" onmousedown="event.preventDefault()" onclick="tbFmt(\'bold\')" title="Negrita"><b>B</b></button><button type="button" class="tb" onmousedown="event.preventDefault()" onclick="tbFmt(\'italic\')" title="Cursiva"><i>I</i></button><button type="button" class="tb" onmousedown="event.preventDefault()" onclick="tbFmt(\'underline\')" title="Subrayado"><u>U</u></button><button type="button" class="tb" onmousedown="event.preventDefault()" onclick="tbFmt(\'insertUnorderedList\')" title="Lista">•</button><button type="button" class="tb" onmousedown="event.preventDefault()" onclick="tbFmt(\'removeFormat\')" title="Limpiar formato">⌫</button>'; }
+function tbItemSave(){ const {c,it}=tbItemCur(); if(!c||!it)return;
+  if(c.type==='contactos'){ it.nombre=(document.getElementById('tbi-nom').value||'').trim(); it.tel=(document.getElementById('tbi-tel').value||'').trim(); }
+  else { const ed=document.getElementById('tbi-editor'); it.texto=sanitize(ed.innerHTML); if(c.type==='textos'){ it.titulo=(document.getElementById('tbi-tit').value||'').trim(); if(!it.titulo)it.titulo=tbPlain(it.texto).slice(0,24); } }
+  saveDB(); renderTablon(); tbiMode='view'; renderTbItem(); toast('Guardado'); }
+function tbCopyCur(){ const {it}=tbItemCur(); if(!it)return; const txt=tbPlain(it.texto); const done=()=>toast('Texto copiado');
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done).catch(()=>toast('No se pudo copiar')); } else { try{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done();}catch(e){toast('No se pudo copiar');} } }
+function renderTbItem(){ const {c,it}=tbItemCur(); if(!c||!it){ closeTbItem(); return; }
+  document.getElementById('tbi-title').textContent=(c.type==='contactos'?'Contacto':(c.type==='textos'?'Texto útil':'Nota'))+' · '+c.title;
+  const body=document.getElementById('tbi-body'), foot=document.getElementById('tbi-foot');
+  if(tbiMode==='edit'){
+    if(c.type==='contactos'){ body.innerHTML='<label class="fld">Nombre</label><input id="tbi-nom" value="'+esc(it.nombre||'')+'"><label class="fld">Teléfono</label><input id="tbi-tel" value="'+esc(it.tel||'')+'">'; setTimeout(()=>{const e=document.getElementById('tbi-nom'); if(e)e.focus();},30); }
+    else { body.innerHTML=(c.type==='textos'?'<label class="fld">Título</label><input id="tbi-tit" value="'+esc(it.titulo||'')+'">':'')+'<label class="fld">Texto</label><div class="toolbar">'+tbEditorToolbar()+'</div><div class="editor" id="tbi-editor" contenteditable="true" onpaste="pastePlain(event)"></div>'; const ed=document.getElementById('tbi-editor'); ed.innerHTML=it.texto||''; setTimeout(()=>ed.focus(),30); }
+    foot.innerHTML='<button class="btn btn-ghost" onclick="tbItemDelete()">Eliminar</button><div style="display:flex;gap:8px"><button class="btn" onclick="tbiMode=\'view\';renderTbItem()">Cancelar</button><button class="btn btn-red" onclick="tbItemSave()">Guardar</button></div>';
+  } else {
+    if(c.type==='contactos'){ body.innerHTML='<div class="tbi-view"><div><span class="tbi-k">Nombre</span><b>'+esc(it.nombre||'—')+'</b></div><div><span class="tbi-k">Teléfono</span>'+(it.tel?'<a href="tel:'+esc(it.tel)+'">'+esc(it.tel)+'</a>':'—')+'</div></div>'; }
+    else { body.innerHTML=(it.titulo&&c.type==='textos'?'<div class="tbi-vtit">'+esc(it.titulo)+'</div>':'')+'<div class="html tbi-html">'+(it.texto||'<span class="tb-empty">(vacío)</span>')+'</div>'; }
+    const copyBtn=(c.type!=='contactos')?'<button class="btn" onclick="tbCopyCur()">Copiar</button>':'';
+    foot.innerHTML='<button class="btn btn-ghost" onclick="tbItemDelete()">Eliminar</button><div style="display:flex;gap:8px">'+copyBtn+'<button class="btn" onclick="tbItemEdit()">Editar</button><button class="btn btn-red" onclick="closeTbItem()">Cerrar</button></div>';
+  }
+}
 function tbItemsHtml(c){
   if(!c.items.length) return '<div class="tb-empty">Vacío.</div>';
-  if(c.type==='contactos') return c.items.map(it=>'<div class="tb-item"><div style="flex:1;min-width:0"><b>'+esc(it.nombre||'—')+'</b>'+(it.tel?' · <a href="tel:'+esc(it.tel)+'">'+esc(it.tel)+'</a>':'')+'</div><span class="tb-x" title="Editar" onclick="tbEditItem(\''+c.id+'\',\''+it.id+'\',\'nombre\')">✎</span><span class="tb-x" onclick="tbDelItem(\''+c.id+'\',\''+it.id+'\')">×</span></div>').join('');
-  if(c.type==='textos') return c.items.map(it=>'<div class="tb-item"><div style="flex:1;min-width:0" title="'+esc(it.texto||'')+'"><b>'+esc(it.titulo||'—')+'</b><div class="tb-sub">'+esc((it.texto||'').slice(0,60))+((it.texto||'').length>60?'…':'')+'</div></div><span class="tb-x" title="Copiar" onclick="tbCopy(\''+c.id+'\',\''+it.id+'\')">Copiar</span><span class="tb-x" title="Editar" onclick="tbEditItem(\''+c.id+'\',\''+it.id+'\',\'texto\')">✎</span><span class="tb-x" onclick="tbDelItem(\''+c.id+'\',\''+it.id+'\')">×</span></div>').join('');
-  return c.items.map(it=>'<div class="tb-item"><div style="flex:1;min-width:0">'+esc(it.texto||'')+'</div><span class="tb-x" title="Editar" onclick="tbEditItem(\''+c.id+'\',\''+it.id+'\',\'texto\')">✎</span><span class="tb-x" onclick="tbDelItem(\''+c.id+'\',\''+it.id+'\')">×</span></div>').join('');
+  return c.items.map(it=>'<div class="tb-item tb-click" title="Ver / editar" onclick="tbOpenItem(\''+c.id+'\',\''+it.id+'\')"><span class="tb-line">'+esc(tbItemLabel(c,it))+'</span>'+(c.type==='contactos'&&it.tel?'<a class="tb-tel" href="tel:'+esc(it.tel)+'" onclick="event.stopPropagation()" title="Llamar">☎</a>':'')+'</div>').join('');
 }
 function tbAddRowHtml(c){
   if(c.type==='contactos') return '<div class="tb-addrow"><input id="tbc-nom-'+c.id+'" placeholder="Nombre" onkeydown="if(event.key===\'Enter\')tbAddContacto(\''+c.id+'\')"><input id="tbc-tel-'+c.id+'" placeholder="Teléfono" onkeydown="if(event.key===\'Enter\')tbAddContacto(\''+c.id+'\')"><button class="tb-addbtn" onclick="tbAddContacto(\''+c.id+'\')">＋</button></div>';
@@ -1740,6 +1783,7 @@ document.getElementById('ov-cat').addEventListener('click',e=>{ if(e.target.id==
 document.getElementById('ov-calc').addEventListener('click',e=>{ if(e.target.id==='ov-calc')closeCalc(); });
 document.getElementById('ov-noteedit').addEventListener('click',e=>{ if(e.target.id==='ov-noteedit')closeNoteEditor(); });
 document.getElementById('ov-archive').addEventListener('click',e=>{ if(e.target.id==='ov-archive')closeArchive(); });
+document.getElementById('ov-tbitem').addEventListener('click',e=>{ if(e.target.id==='ov-tbitem')closeTbItem(); });
 document.getElementById('ov-search').addEventListener('click',e=>{ if(e.target.id==='ov-search')closeSearch(); });
 document.getElementById('ov-tpledit').addEventListener('click',e=>{ if(e.target.id==='ov-tpledit')closeTplEdit(); });
 document.getElementById('ov-estedit').addEventListener('click',e=>{ if(e.target.id==='ov-estedit')closeEstEdit(); });
