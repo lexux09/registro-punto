@@ -240,6 +240,52 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 .calc-tot{margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:12.5px;font-weight:600;display:flex;gap:16px;flex-wrap:wrap}
 .calc-tot b{color:var(--red)}
 @media(max-width:520px){.calc-head{display:none}.calc-row{grid-template-columns:1fr;gap:6px}}
+/* ===== menú superior ===== */
+.menubar{position:sticky;top:0;z-index:150;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);box-shadow:var(--shadow);padding:8px 12px;margin-bottom:14px;border-radius:10px}
+.menu-grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+/* ===== filas nuevas ===== */
+.notes-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start;margin-bottom:16px}
+.work-row{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start}
+.col-work{display:flex;flex-direction:column;gap:16px;min-width:0}
+.notes-row .card,.work-row .card{margin-bottom:0}
+@media(max-width:1100px){.notes-row{grid-template-columns:1fr 1fr}.work-row{grid-template-columns:1fr}}
+@media(max-width:720px){.notes-row{grid-template-columns:1fr}}
+/* ===== tablón ===== */
+.tb-card{display:flex;flex-direction:column;gap:6px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--white);box-shadow:var(--shadow)}
+.tb-head{display:flex;align-items:center;gap:6px}
+.tb-title{flex:1;min-width:0;font-weight:700;font-size:12.5px;border:none;background:none;color:var(--text);padding:2px 0}
+.tb-title:focus{outline:none;border-bottom:1px solid var(--border2)}
+.tb-del{cursor:pointer;color:var(--text3);font-size:15px;line-height:1;padding:0 2px}
+.tb-del:hover{color:var(--red)}
+.tb-items{display:flex;flex-direction:column;gap:3px}
+.tb-item{display:flex;align-items:center;gap:6px;font-size:11.5px;padding:3px 4px;border-radius:5px;background:rgba(128,128,128,.05)}
+.tb-item a{color:var(--red);text-decoration:none}
+.tb-sub{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-x{cursor:pointer;color:var(--text3);font-size:11px;flex-shrink:0;padding:0 2px}
+.tb-x:hover{color:var(--red)}
+.tb-empty{font-size:11px;color:var(--text3);padding:2px 4px}
+.tb-addrow{display:flex;gap:4px;align-items:center;margin-top:2px}
+.tb-addrow.tb-addcol{flex-direction:column;align-items:stretch}
+.tb-addrow input,.tb-addrow textarea{font-size:11.5px;padding:4px 6px;width:100%}
+.tb-addbtn{border:1px dashed var(--border2);background:var(--white);color:var(--text2);border-radius:6px;cursor:pointer;font-size:13px;padding:4px 8px;flex-shrink:0}
+.tb-addbtn.wide{width:100%}
+.tb-addbtn:hover{border-color:var(--red);color:var(--red)}
+.tb-newcard{display:flex;flex-direction:column;gap:5px;align-items:flex-start;justify-content:center;padding:12px;border:1px dashed var(--border2);border-radius:9px}
+.tb-newlabel{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);font-weight:600}
+/* ===== producción del día ===== */
+.prod{display:flex;flex-direction:column;gap:8px;margin:4px 0 14px;padding:10px;border:1px solid var(--border2);border-radius:9px;background:rgba(128,128,128,.04)}
+.prod-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.prod-lbl{font-size:11px;font-weight:600;color:var(--text2);min-width:92px}
+.prod-marcas{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.prod-m{display:flex;align-items:center;gap:3px;border:1px solid var(--border);border-radius:7px;padding:2px 4px;background:var(--white)}
+.prod-mn{font-size:10px;font-weight:700;color:var(--text3);width:26px;text-align:center}
+.prod-to{display:flex;align-items:center;gap:3px}
+.prod-b{width:22px;height:22px;border:1px solid var(--border2);background:var(--white);color:var(--text);border-radius:5px;cursor:pointer;font-size:14px;line-height:1;padding:0}
+.prod-b:hover{border-color:var(--red);color:var(--red)}
+.prod-v{width:34px;text-align:center;font-weight:700;font-size:13px;padding:2px 2px;border:1px solid var(--border);border-radius:5px;background:var(--white);color:var(--text);-moz-appearance:textfield}
+.prod-v::-webkit-outer-spin-button,.prod-v::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.prod-v:focus{outline:none;border-color:var(--red)}
+.prod-tot{font-size:11.5px;color:var(--text2)}.prod-tot b{color:var(--red)}
 .obs-chip a{font-size:9px;color:var(--text3);cursor:pointer;text-transform:uppercase;letter-spacing:.03em}
 .obs-chip a:hover{color:var(--red)}
 .note-i .html ul{padding-left:20px;margin:4px 0}
@@ -303,22 +349,30 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
   </div>
 </div>
 <div class="wrap">
+  <!-- ===== MENÚ SUPERIOR ===== -->
+  <div class="menubar">
+    <div class="menu-grp">
+      <button class="btn btn-sm btn-dark" onclick="goToday()" style="font-weight:700">HOY · MES ACTUAL</button>
+      <button class="btn btn-sm" onclick="openNoteEditor()">✎ Escribir nota</button>
+      <button class="btn btn-sm" onclick="openSearch()">Buscar / Pendientes</button>
+      <button class="btn btn-sm" onclick="openCalc()">Calculadora</button>
+      <button class="btn btn-sm" onclick="openArchive()">Notas archivadas</button>
+    </div>
+    <div class="menu-grp">
+      <button class="btn btn-sm" id="theme-btn" onclick="toggleTheme()">Modo oscuro</button>
+      <button class="btn btn-sm" onclick="exportDB()">Exportar</button>
+      <button class="btn btn-sm" onclick="document.getElementById('imp').click()">Importar</button>
+      <input type="file" id="imp" accept="application/json" style="display:none" onchange="importDB(this)">
+    </div>
+  </div>
   <!-- ===== BANDA SUPERIOR ===== -->
   <div class="topband">
     <!-- Identidad + Resumen del mes (fusionados) -->
     <div class="card tb-main">
       <div class="tb-idrow">
-        <div class="idbox"><div style="display:flex;align-items:center;gap:10px"><h1>Bruno Vinicius</h1><button class="btn btn-sm" onclick="openCalc()" title="Calculadora de precios (neto · margen · PVP)">Calculadora</button></div><span class="who">baraujo@viajesparati.com</span></div>
-        <div class="tb-actions">
-          <button class="btn btn-sm" onclick="openSearch()">Buscar / Pendientes</button>
-          <button class="btn btn-sm" id="theme-btn" onclick="toggleTheme()">Modo oscuro</button>
-          <button class="btn btn-sm btn-dark" onclick="goToday()" style="font-weight:700">HOY · MES ACTUAL</button>
-          <button class="btn btn-sm" onclick="exportDB()">Exportar</button>
-          <button class="btn btn-sm" onclick="document.getElementById('imp').click()">Importar</button>
-        </div>
+        <div class="idbox"><h1>Bruno Vinicius</h1><span class="who">baraujo@viajesparati.com</span></div>
+        <div class="tb-status"><span class="st" id="sync-st" title="Sincronización">Local</span> · <span class="st" id="save-st">Guardado local activo</span></div>
       </div>
-      <div class="tb-status"><span class="st" id="sync-st" title="Sincronización">Local</span> · <span class="st" id="save-st">Guardado local activo</span></div>
-      <input type="file" id="imp" accept="application/json" style="display:none" onchange="importDB(this)">
       <div class="tb-sep"></div>
       <div class="tb-reshead"><h2>Resumen del mes</h2>
         <div class="wk-nav" style="margin:0 0 0 auto">
@@ -336,101 +390,84 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
     </div>
   </div>
 
-  <div class="layout">
-  <!-- ===== COLUMNA 1 ===== -->
-  <div class="col-1">
-  <!-- HORARIO -->
-  <div class="card">
-    <h2>Horario de trabajo</h2>
-    <div class="wk-nav">
-      <button class="btn btn-sm" onclick="horShift(-1)">‹</button>
-      <div class="lbl" id="wk-label"></div>
-      <button class="btn btn-sm" onclick="horShift(1)">›</button>
-      <span class="view-seg" style="margin-left:6px">
-        <button id="vw-week" class="on" onclick="setHorView('week')">Semana</button>
-        <button id="vw-month" onclick="setHorView('month')">Mes</button>
-      </span>
-      <span class="spacer"></span>
-      <span class="wk-hours" id="wk-hours"></span>
-      <button class="btn btn-sm" onclick="openTemplates()">Plantillas</button>
-      <button class="btn btn-sm" onclick="openEstados()">Estados</button>
+  <!-- ===== FILA DE NOTAS: Día · Generales · Tablón ===== -->
+  <div class="notes-row">
+    <div class="card">
+      <h2>Notas del día <span class="hint" id="daynotes-date" style="margin-left:6px"></span></h2>
+      <div class="note-list drop-zone" id="day-notes" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,false)"></div>
     </div>
-    <div class="hoy-strip" id="hoy-strip"></div>
-    <div class="monthhdr" id="monthhdr" style="display:none"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
-    <div class="weekgrid" id="weekgrid"></div>
+    <div class="card">
+      <h2>Notas generales</h2>
+      <div id="gen-tagbar"></div>
+      <div class="note-list drop-zone" id="gen-pend" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,true)"></div>
+    </div>
+    <div class="card">
+      <div class="tb-links-head"><h2>Tablón</h2><span class="hint" style="margin:0 0 0 auto">Info útil siempre a mano</span></div>
+      <div class="note-list" id="tablon"></div>
+    </div>
   </div>
-  <!-- ESCRIBIR NOTA DEL DÍA -->
-  <div class="card">
-    <h2>Escribir nota del día</h2>
-    <div class="daypanel" id="daypanel"></div>
-  </div>
-  </div><!-- /col-1 -->
 
-  <!-- ===== COLUMNA MEDIA ===== -->
-  <div class="col-mid">
-  <!-- TAREAS DE HOY -->
-  <div class="card">
-    <h2>Tareas de hoy</h2>
-    <div class="datenav">
-      <button class="btn btn-sm" onclick="shiftDay(-1)">‹</button>
-      <div class="d" id="tk-date"></div>
-      <button class="btn btn-sm" onclick="shiftDay(1)">›</button>
-      <span class="badge" id="tk-badge" style="display:none">HOY</span>
-      <span class="spacer" style="flex:1"></span>
-      <button class="btn btn-sm" onclick="bringYesterday()" title="Traer pendientes del día anterior">Pendientes de ayer</button>
-    </div>
-    <div class="tkwrap">
-      <div class="tk-col" style="margin-bottom:16px">
-        <h3>Pase de turno <span class="cnt" id="cnt-pase"></span></h3>
-        <div class="add-row">
-          <select id="sel-pase" onchange="paseSelChange()"></select>
-          <button class="btn btn-red btn-sm" onclick="addPase()">+</button>
-        </div>
-        <input id="in-pase-otro" style="display:none;margin-bottom:10px" placeholder="Escribe la tarea…" onkeydown="if(event.key==='Enter')addPase()">
-        <div id="list-pase"></div>
+  <!-- ===== FILA DE TRABAJO: Horario · (Producción + Tareas de hoy) ===== -->
+  <div class="work-row">
+    <div class="card">
+      <h2>Horario de trabajo</h2>
+      <div class="wk-nav">
+        <button class="btn btn-sm" onclick="horShift(-1)">‹</button>
+        <div class="lbl" id="wk-label"></div>
+        <button class="btn btn-sm" onclick="horShift(1)">›</button>
+        <span class="view-seg" style="margin-left:6px">
+          <button id="vw-week" class="on" onclick="setHorView('week')">Semana</button>
+          <button id="vw-month" onclick="setHorView('month')">Mes</button>
+        </span>
+        <span class="spacer"></span>
+        <span class="wk-hours" id="wk-hours"></span>
+        <button class="btn btn-sm" onclick="openTemplates()">Plantillas</button>
+        <button class="btn btn-sm" onclick="openEstados()">Estados</button>
       </div>
-      <div class="tk-col">
-        <h3>Tickets <span class="cnt" id="cnt-tickets"></span></h3>
-        <div class="add-row">
-          <select id="sel-ticket" onchange="ticketSelChange()"></select>
-          <button class="btn btn-red btn-sm" onclick="addTicket()">+</button>
+      <div class="hoy-strip" id="hoy-strip"></div>
+      <div class="monthhdr" id="monthhdr" style="display:none"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
+      <div class="weekgrid" id="weekgrid"></div>
+    </div>
+    <div class="col-work">
+      <!-- TAREAS DE HOY -->
+      <div class="card">
+        <h2>Tareas de hoy</h2>
+        <div class="datenav">
+          <button class="btn btn-sm" onclick="shiftDay(-1)">‹</button>
+          <div class="d" id="tk-date"></div>
+          <button class="btn btn-sm" onclick="shiftDay(1)">›</button>
+          <span class="badge" id="tk-badge" style="display:none">HOY</span>
+          <span class="spacer" style="flex:1"></span>
+          <button class="btn btn-sm" onclick="bringYesterday()" title="Traer pendientes del día anterior">Pendientes de ayer</button>
         </div>
-        <input id="in-ticket-otro" style="display:none;margin-bottom:10px" placeholder="Escribe el ticket…" onkeydown="if(event.key==='Enter')addTicket()">
-        <div id="list-tickets"></div>
+        <!-- Producción del día -->
+        <div class="prod" id="prod-day"></div>
+        <div class="tkwrap">
+          <div class="tk-col" style="margin-bottom:16px">
+            <h3>Pase de turno <span class="cnt" id="cnt-pase"></span></h3>
+            <div class="add-row">
+              <select id="sel-pase" onchange="paseSelChange()"></select>
+              <button class="btn btn-red btn-sm" onclick="addPase()">+</button>
+            </div>
+            <input id="in-pase-otro" style="display:none;margin-bottom:10px" placeholder="Escribe la tarea…" onkeydown="if(event.key==='Enter')addPase()">
+            <div id="list-pase"></div>
+          </div>
+          <div class="tk-col">
+            <h3>Tickets <span class="cnt" id="cnt-tickets"></span></h3>
+            <div class="add-row">
+              <select id="sel-ticket" onchange="ticketSelChange()"></select>
+              <button class="btn btn-red btn-sm" onclick="addTicket()">+</button>
+            </div>
+            <input id="in-ticket-otro" style="display:none;margin-bottom:10px" placeholder="Escribe el ticket…" onkeydown="if(event.key==='Enter')addTicket()">
+            <div id="list-tickets"></div>
+          </div>
+        </div>
+        <div class="sec-h" onclick="toggleTrash()">Papelera de tareas (<span id="c-ttrash">0</span>) ▾</div>
+        <div class="hint" style="margin:2px 0 6px">Se vacía al final del día. Recupera lo que quieras conservar antes.</div>
+        <div id="task-trash" style="display:none"></div>
       </div>
     </div>
-    <div class="sec-h" onclick="toggleTrash()">Papelera de tareas (<span id="c-ttrash">0</span>) ▾</div>
-    <div class="hint" style="margin:2px 0 6px">Se vacía al final del día. Recupera lo que quieras conservar antes.</div>
-    <div id="task-trash" style="display:none"></div>
   </div>
-  </div><!-- /col-mid -->
-
-  <!-- ===== COLUMNA 2 ===== -->
-  <div class="col-2">
-  <!-- NOTAS GENERALES -->
-  <div class="card">
-    <h2>Notas generales</h2>
-    <div class="hint">Notas visibles todos los días. Asigna categorías para clasificar y colorear.</div>
-    <div id="gen-tagbar"></div>
-    <div class="note-list drop-zone" id="gen-pend" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,true)"></div>
-  </div>
-  <!-- NOTAS DEL DÍA (lista) -->
-  <div class="card">
-    <h2>Notas del día</h2>
-    <div class="note-list drop-zone" id="day-notes" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,false)"></div>
-  </div>
-  <!-- NOTAS ARCHIVADAS -->
-  <div class="card">
-    <h2>Notas archivadas</h2>
-    <div class="hint">Notas concluidas y excluidas (del día y generales).</div>
-    <div class="sec-h" onclick="toggleSec('concl')">Concluidas (<span id="c-concl">0</span>) ▾</div>
-    <div id="notes-concl" class="note-list" style="display:none"></div>
-    <div class="sec-h" onclick="toggleSec('pap')">Papelera (<span id="c-pap">0</span>) ▾</div>
-    <div class="hint" style="margin:2px 0 6px">Se vacía al final del día. Recupera lo que quieras conservar antes.</div>
-    <div id="notes-pap" class="note-list" style="display:none"></div>
-  </div>
-  </div><!-- /col-2 -->
-  </div><!-- /layout -->
 </div>
 
 <!-- ===== MODAL EDITAR DÍA ===== -->
@@ -620,6 +657,29 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
   </div>
 </div>
 
+<!-- ===== MODAL ESCRIBIR NOTA DEL DÍA ===== -->
+<div class="ov" id="ov-noteedit">
+  <div class="modal" style="max-width:640px">
+    <div class="mh"><span>Escribir nota del día</span><button class="btn btn-sm btn-ghost" onclick="closeNoteEditor()">×</button></div>
+    <div class="mb"><div class="daypanel" id="daypanel"></div></div>
+  </div>
+</div>
+
+<!-- ===== MODAL NOTAS ARCHIVADAS ===== -->
+<div class="ov" id="ov-archive">
+  <div class="modal" style="max-width:640px">
+    <div class="mh"><span>Notas archivadas</span><button class="btn btn-sm btn-ghost" onclick="closeArchive()">×</button></div>
+    <div class="mb">
+      <div class="hint">Notas concluidas y excluidas (del día y generales).</div>
+      <div class="sec-h" onclick="toggleSec('concl')">Concluidas (<span id="c-concl">0</span>) ▾</div>
+      <div id="notes-concl" class="note-list" style="display:none"></div>
+      <div class="sec-h" onclick="toggleSec('pap')">Papelera (<span id="c-pap">0</span>) ▾</div>
+      <div class="hint" style="margin:2px 0 6px">Se vacía al final del día. Recupera lo que quieras conservar antes.</div>
+      <div id="notes-pap" class="note-list" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== MODAL NOTA (popup) ===== -->
 <div class="ov" id="ov-note">
   <div class="modal">
@@ -637,7 +697,11 @@ const HOR_SEED = [{"f":"2026-09-01","st":"descanso"},{"f":"2026-09-02","st":"tra
 
 /* ===== DB ===== */
 const LS_KEY='baraujo_control_v2';
-let DB={ meta:{user:'baraujo',name:'Bruno'}, sched:{}, templates:[], estados:[], idiomasPool:[], notes:[], tasks:{}, tags:{}, taskTrash:[], ticketOptions:[], links:[], packs:[], categories:[], noteCats:[] };
+let DB={ meta:{user:'baraujo',name:'Bruno'}, sched:{}, templates:[], estados:[], idiomasPool:[], notes:[], tasks:{}, tags:{}, taskTrash:[], ticketOptions:[], links:[], packs:[], categories:[], noteCats:[], tablon:[] };
+const TK_MARCAS=['ESQ','BUC','AMI','J2S'];
+function emptyProd(){ return {tickets:{ESQ:0,BUC:0,AMI:0,J2S:0}, timeouts:0}; }
+function dayProd(ds){ const d=dayObj(ds); if(!d.prod)d.prod=emptyProd(); if(!d.prod.tickets)d.prod.tickets={ESQ:0,BUC:0,AMI:0,J2S:0}; TK_MARCAS.forEach(m=>{ if(typeof d.prod.tickets[m]!=='number')d.prod.tickets[m]=0; }); if(typeof d.prod.timeouts!=='number')d.prod.timeouts=0; return d.prod; }
+function prodTicketsTotal(p){ return TK_MARCAS.reduce((s,m)=>s+(p.tickets[m]||0),0); }
 /* ===== categorías (color + mezcla). Botones (DB.categories) y notas (DB.noteCats) SEPARADAS ===== */
 function hexToRgb(h){ h=(h||'').replace('#',''); if(h.length===3)h=h.split('').map(c=>c+c).join(''); if(h.length<6)return null; return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
 function blendColors(cols){ cols=cols.filter(Boolean); if(!cols.length)return ''; const s=[0,0,0]; let n=0; cols.forEach(c=>{const r=hexToRgb(c); if(r){s[0]+=r[0];s[1]+=r[1];s[2]+=r[2];n++;}}); if(!n)return ''; return '#'+s.map(x=>Math.round(x/n).toString(16).padStart(2,'0')).join(''); }
@@ -725,6 +789,11 @@ function loadDB(){
 }
 function normalizeDB(){
   DB.sched=DB.sched||{}; DB.templates=DB.templates||[]; DB.notes=DB.notes||[]; DB.tasks=DB.tasks||{}; DB.tags=DB.tags||{}; DB.taskTrash=DB.taskTrash||[]; DB.ticketOptions=DB.ticketOptions||[]; DB.links=DB.links||[]; DB.packs=DB.packs||[]; DB.categories=DB.categories||[];
+  DB.tablon=DB.tablon||[];
+  if(!DB.tablonSeed){ if(!DB.tablon.length){ DB.tablon=[
+      {id:'tb'+Date.now().toString(36)+'a', type:'contactos', title:'Contactos', items:[]},
+      {id:'tb'+Date.now().toString(36)+'b', type:'textos', title:'Textos útiles', items:[]}
+    ]; } DB.tablonSeed=true; }
   if(!DB.catV1){
     [['Mapas','#0ea5e9'],['Documentos','#f59e0b'],['Webs','#3b82f6'],['Guías','#8b5cf6']].forEach(([n,c])=>ensureCat(n,c));
     (DB.packs||[]).forEach(p=>{ if(!DB.categories.some(c=>c.id===p.id)) DB.categories.push({id:p.id,name:p.name,color:p.color||'#3b82f6'}); });
@@ -862,21 +931,24 @@ function dayCellHtml(d,ds,other){
     (isT?'<div class="todaytag">HOY</div>':'')+
     '<div class="dn"'+dnStyle+'>'+DOW_S[d.getDay()]+'</div><div class="dd">'+d.getDate()+'</div>'+inner+'</div>';
 }
-function renderHor(){ if(horView==='month') renderMonth(); else renderWeek(); renderHoy(); renderDayPanel(); renderResumen(); }
+function renderHor(){ if(horView==='month') renderMonth(); else renderWeek(); renderHoy(); renderDayPanel(); renderProd(); renderResumen(); }
 let resMonth=isoLocal(new Date());
 function resShift(n){ const d=parseISO(resMonth); d.setMonth(d.getMonth()+n); resMonth=isoLocal(d); renderResumen(); }
 function resToday(){ resMonth=isoLocal(new Date()); renderResumen(); }
 function renderResumen(){ const el=document.getElementById('resumen'); if(!el)return;
   const ref=parseISO(resMonth); const y=ref.getFullYear(), m=ref.getMonth();
-  let horas=0,dtrab=0,ddesc=0,dvac=0,festTrab=0,hechas=0; const freq={}; const dias=[];
+  let horas=0,dtrab=0,ddesc=0,dvac=0,festTrab=0,hechas=0,timeouts=0; const freq={}; const dias=[]; const tkMarca={ESQ:0,BUC:0,AMI:0,J2S:0};
   for(let d=1;d<=31;d++){ const dt=new Date(y,m,d); if(dt.getMonth()!==m)break; const ds=isoLocal(dt); dias.push(ds);
     const e=DB.sched[ds]; if(e){ const es=estById(e.st);
       if(es.work&&e.t){ horas+=hoursOf(e.t); dtrab++; if(e.festivo)festTrab++; }
       else if(es.id==='descanso'||/descanso/i.test(es.name||'')) ddesc++;
       else if(es.id==='vacaciones'||/vacacion/i.test(es.name||'')) dvac++;
     }
-    const tk=DB.tasks[ds]; if(tk)['pase','tickets'].forEach(k=>(tk[k]||[]).forEach(x=>{ if(x.done){ hechas++; freq[x.txt]=(freq[x.txt]||0)+1; } }));
+    const tk=DB.tasks[ds]; if(tk){ ['pase','tickets'].forEach(k=>(tk[k]||[]).forEach(x=>{ if(x.done){ hechas++; freq[x.txt]=(freq[x.txt]||0)+1; } }));
+      if(tk.prod){ if(tk.prod.tickets)TK_MARCAS.forEach(mk=>tkMarca[mk]+=(tk.prod.tickets[mk]||0)); timeouts+=tk.prod.timeouts||0; }
+    }
   }
+  const tkTot=TK_MARCAS.reduce((s,mk)=>s+tkMarca[mk],0);
   const top=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);
   // frecuencia GENERAL (todo el histórico, todos los meses)
   const freqAll={}; Object.values(DB.tasks).forEach(tk=>['pase','tickets'].forEach(k=>(tk[k]||[]).forEach(x=>{ if(x.done)freqAll[x.txt]=(freqAll[x.txt]||0)+1; })));
@@ -885,7 +957,8 @@ function renderResumen(){ const el=document.getElementById('resumen'); if(!el)re
   const gridHtml=items=>'<div class="freq-grid">'+items.map(([n,c])=>'<div class="freq" title="'+esc(n)+' · '+c+'"><span>'+esc(n)+'</span><b>'+c+'</b></div>').join('')+'</div>';
   const mesLbl=MONL[m].charAt(0).toUpperCase()+MONL[m].slice(1)+' '+y;
   const lab=document.getElementById('res-label'); if(lab)lab.textContent=mesLbl;
-  el.innerHTML='<div class="stats">'+tile('Horas',(horas?horas.toFixed(1):'0')+' h')+tile('Días trab.',dtrab)+tile('Festiv. trab.',festTrab)+tile('Descanso',ddesc)+tile('Vacac.',dvac)+tile('Tareas hechas',hechas)+'</div>'+
+  el.innerHTML='<div class="stats">'+tile('Horas',(horas?horas.toFixed(1):'0')+' h')+tile('Días trab.',dtrab)+tile('Festiv. trab.',festTrab)+tile('Descanso',ddesc)+tile('Vacac.',dvac)+tile('Tareas hechas',hechas)+tile('Tickets',tkTot)+tile('Timeouts',timeouts)+'</div>'+
+    '<div class="freq-h" style="cursor:default">Tickets por marca · este mes</div><div class="freq-grid">'+TK_MARCAS.map(mk=>'<div class="freq"><span>'+mk+'</span><b>'+tkMarca[mk]+'</b></div>').join('')+'</div>'+
     (top.length?'<div class="freq-h" style="cursor:default">Tareas más hechas · este mes</div>'+gridHtml(top):'')+
     (topAll.length?'<div class="freq-h" style="cursor:default">Tareas más hechas · general</div>'+gridHtml(topAll):'');
 }
@@ -975,6 +1048,7 @@ function renderDayPanel(){
       '<button class="btn btn-dark" onclick="saveNote()">'+(editingNoteId?'Guardar cambios':'Guardar')+'</button>'+
       (editingNoteId?'<button class="btn" style="align-self:flex-end" onclick="cancelEdit()">Cancelar</button>':'')+'</div>';
   renderNoteCats();
+  const dd=document.getElementById('daynotes-date'); if(dd)dd.textContent='· '+human(ds);
   const dn=document.getElementById('day-notes'); if(dn) dn.innerHTML=notes.length?notes.map(n=>noteHtml(n,'pend',Date.now())).join(''):(noteFilter?'<div class="empty">Sin notas en esta categoría.</div>':'<div class="drop-hint">Sin notas para este día.<br>Arrastra aquí una nota para asignarla a este día.</div>');
   if(editingNoteId){ const en=findNote(editingNoteId); if(en) prefillEditor(en); else editingNoteId=null; }
 }
@@ -1143,7 +1217,12 @@ function prefillEditor(n){ const ed=document.getElementById('note-editor'); if(!
   const g=document.getElementById('note-general'); if(g)g.checked=!!n.general;
   const a=document.getElementById('note-aviso'); if(a)a.value=n.aviso?String(n.aviso).slice(0,16):'';
   noteEdCats=(n.cats||[]).slice(); renderNoteCats(); }
-function cancelEdit(){ editingNoteId=null; noteEdCats=[]; renderHor(); }
+function cancelEdit(){ editingNoteId=null; noteEdCats=[]; closeNoteEditor(); renderHor(); }
+/* editor de nota como modal */
+function openNoteEditor(){ renderDayPanel(); document.getElementById('ov-noteedit').classList.add('show'); setTimeout(()=>{ const e=document.getElementById('note-editor'); if(e&&!editingNoteId)e.focus(); },40); }
+function closeNoteEditor(){ document.getElementById('ov-noteedit').classList.remove('show'); }
+function openArchive(){ renderNotes(); document.getElementById('ov-archive').classList.add('show'); }
+function closeArchive(){ document.getElementById('ov-archive').classList.remove('show'); }
 function saveNote(){ const ed=document.getElementById('note-editor'); if(!ed)return; const html=sanitize(ed.innerHTML);
   if(!ed.textContent.trim()){ toast('La nota está vacía'); return; }
   const av=document.getElementById('note-aviso').value;
@@ -1152,10 +1231,10 @@ function saveNote(){ const ed=document.getElementById('note-editor'); if(!ed)ret
   const cats=noteEdCats.slice();
   if(editingNoteId){ const n=findNote(editingNoteId);
     if(n){ n.html=html; n.aviso=av||null; n.general=general; n.fecha=fecha; n.cats=cats; n.color=catColor(cats)||n.color; }
-    editingNoteId=null; noteEdCats=[]; saveDB(); renderNotes(); renderHor(); toast('Nota actualizada'); return; }
+    editingNoteId=null; noteEdCats=[]; saveDB(); closeNoteEditor(); renderNotes(); renderHor(); toast('Nota actualizada'); return; }
   const note={id:Date.now(),html,aviso:av||null,general,fecha,cats,concluida:false,eliminada:false,created:new Date().toISOString()};
   note.color=catColor(cats)||undefined;
-  DB.notes.unshift(note); noteEdCats=[]; saveDB(); renderNotes(); renderHor();
+  DB.notes.unshift(note); noteEdCats=[]; saveDB(); closeNoteEditor(); renderNotes(); renderHor();
   toast(general?'Nota general guardada':'Nota del '+fmtDMY(fecha)+' guardada'); }
 function renderNotes(){
   const now=Date.now();
@@ -1243,7 +1322,7 @@ function noteReopen(id){ const n=findNote(id); n.concluida=false; delete n.concl
 function noteDel(id){ const n=findNote(id); n.eliminada=true; n.eliminadaFecha=isoLocal(new Date()); saveDB(); refreshNotes(); }
 function noteRestore(id){ const n=findNote(id); n.eliminada=false; delete n.eliminadaFecha; saveDB(); refreshNotes(); }
 function noteToggleGeneral(id){ const n=findNote(id); n.general=!n.general; if(!n.general)n.fecha=selDate; saveDB(); refreshNotes(); toast(n.general?'Ahora es general (todos los días)':'Ahora solo del '+fmtDMY(n.fecha)); }
-function noteEdit(id){ const n=findNote(id); if(!n)return; editingNoteId=id; if(!n.general)selDate=n.fecha; renderHor(); prefillEditor(n); toast('Editando nota — pulsa Guardar cambios'); }
+function noteEdit(id){ const n=findNote(id); if(!n)return; editingNoteId=id; if(!n.general)selDate=n.fecha; renderHor(); closeArchive(); openNoteEditor(); prefillEditor(n); toast('Editando nota — pulsa Guardar cambios'); }
 function notePurge(id){ if(!confirm('¿Borrar definitivamente?'))return; DB.notes=DB.notes.filter(n=>n.id!==id); saveDB(); refreshNotes(); }
 /* --- gestor de colores de etiquetas (legado → categorías) --- */
 function openTags(){ openCats('note'); }
@@ -1582,8 +1661,54 @@ function calcSaveNote(){ const rows=calcLines.filter(l=>calcNetoTotal(l)!=null||
   DB.notes.unshift({id:Date.now(),html:html,aviso:null,general:false,fecha:selDate,cats:[],concluida:false,eliminada:false,created:new Date().toISOString()});
   saveDB(); renderNotes(); renderHor(); closeCalc(); toast('Cálculo guardado como nota del '+fmtDMY(selDate)); }
 
+/* ===== TABLÓN (información útil siempre a mano: contactos, textos, libres) ===== */
+function tbNewId(p){ return (p||'i')+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36); }
+function tbCardById(id){ return DB.tablon.find(c=>c.id===id); }
+function tbAddCard(type){ const titles={contactos:'Contactos',textos:'Textos útiles',libre:'Nota'}; DB.tablon.push({id:tbNewId('tb'),type:type,title:titles[type]||'Tarjeta',items:[]}); saveDB(); renderTablon(); }
+function tbDelCard(id){ const c=tbCardById(id); if(c&&c.items.length&&!confirm('¿Eliminar la tarjeta «'+c.title+'» y sus '+c.items.length+' elementos?'))return; DB.tablon=DB.tablon.filter(c=>c.id!==id); saveDB(); renderTablon(); }
+function tbRename(id,v){ const c=tbCardById(id); if(c){ c.title=(v||'').trim()||c.title; saveDB(); } }
+function tbDelItem(cid,iid){ const c=tbCardById(cid); if(!c)return; c.items=c.items.filter(x=>x.id!==iid); saveDB(); renderTablon(); }
+function tbAddContacto(cid){ const c=tbCardById(cid); const nm=document.getElementById('tbc-nom-'+cid), tl=document.getElementById('tbc-tel-'+cid);
+  const n=(nm.value||'').trim(), t=(tl.value||'').trim(); if(!n&&!t){ toast('Pon nombre o teléfono'); return; }
+  c.items.push({id:tbNewId('c'),nombre:n,tel:t}); saveDB(); renderTablon(); setTimeout(()=>{const e=document.getElementById('tbc-nom-'+cid); if(e)e.focus();},30); }
+function tbAddTexto(cid){ const c=tbCardById(cid); const ti=document.getElementById('tbt-tit-'+cid), tx=document.getElementById('tbt-txt-'+cid);
+  const titu=(ti.value||'').trim(), texto=(tx.value||'').trim(); if(!texto){ toast('Escribe el texto'); return; }
+  c.items.push({id:tbNewId('t'),titulo:titu||texto.slice(0,24),texto:texto}); saveDB(); renderTablon(); }
+function tbAddLibre(cid){ const c=tbCardById(cid); const tx=document.getElementById('tbl-txt-'+cid); const texto=(tx.value||'').trim(); if(!texto){ toast('Escribe algo'); return; }
+  c.items.push({id:tbNewId('l'),texto:texto}); saveDB(); renderTablon(); }
+function tbEditItem(cid,iid,field){ const c=tbCardById(cid); const it=c&&c.items.find(x=>x.id===iid); if(!it)return;
+  const cur=it[field]||''; const v=prompt('Editar:', cur); if(v===null)return; it[field]=v.trim(); if(c.type==='textos'&&field==='texto'&&!it.titulo)it.titulo=v.trim().slice(0,24); saveDB(); renderTablon(); }
+function tbCopy(cid,iid){ const c=tbCardById(cid); const it=c&&c.items.find(x=>x.id===iid); if(!it)return; const txt=it.texto||'';
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(()=>toast('Texto copiado')).catch(()=>toast('No se pudo copiar')); } else { try{const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('Texto copiado');}catch(e){toast('No se pudo copiar');} } }
+function tbItemsHtml(c){
+  if(!c.items.length) return '<div class="tb-empty">Vacío.</div>';
+  if(c.type==='contactos') return c.items.map(it=>'<div class="tb-item"><div style="flex:1;min-width:0"><b>'+esc(it.nombre||'—')+'</b>'+(it.tel?' · <a href="tel:'+esc(it.tel)+'">'+esc(it.tel)+'</a>':'')+'</div><span class="tb-x" title="Editar" onclick="tbEditItem(\''+c.id+'\',\''+it.id+'\',\'nombre\')">✎</span><span class="tb-x" onclick="tbDelItem(\''+c.id+'\',\''+it.id+'\')">×</span></div>').join('');
+  if(c.type==='textos') return c.items.map(it=>'<div class="tb-item"><div style="flex:1;min-width:0" title="'+esc(it.texto||'')+'"><b>'+esc(it.titulo||'—')+'</b><div class="tb-sub">'+esc((it.texto||'').slice(0,60))+((it.texto||'').length>60?'…':'')+'</div></div><span class="tb-x" title="Copiar" onclick="tbCopy(\''+c.id+'\',\''+it.id+'\')">Copiar</span><span class="tb-x" title="Editar" onclick="tbEditItem(\''+c.id+'\',\''+it.id+'\',\'texto\')">✎</span><span class="tb-x" onclick="tbDelItem(\''+c.id+'\',\''+it.id+'\')">×</span></div>').join('');
+  return c.items.map(it=>'<div class="tb-item"><div style="flex:1;min-width:0">'+esc(it.texto||'')+'</div><span class="tb-x" title="Editar" onclick="tbEditItem(\''+c.id+'\',\''+it.id+'\',\'texto\')">✎</span><span class="tb-x" onclick="tbDelItem(\''+c.id+'\',\''+it.id+'\')">×</span></div>').join('');
+}
+function tbAddRowHtml(c){
+  if(c.type==='contactos') return '<div class="tb-addrow"><input id="tbc-nom-'+c.id+'" placeholder="Nombre" onkeydown="if(event.key===\'Enter\')tbAddContacto(\''+c.id+'\')"><input id="tbc-tel-'+c.id+'" placeholder="Teléfono" onkeydown="if(event.key===\'Enter\')tbAddContacto(\''+c.id+'\')"><button class="tb-addbtn" onclick="tbAddContacto(\''+c.id+'\')">＋</button></div>';
+  if(c.type==='textos') return '<div class="tb-addrow tb-addcol"><input id="tbt-tit-'+c.id+'" placeholder="Título (opcional)"><textarea id="tbt-txt-'+c.id+'" placeholder="Texto para copiar…" rows="2"></textarea><button class="tb-addbtn wide" onclick="tbAddTexto(\''+c.id+'\')">＋ Añadir</button></div>';
+  return '<div class="tb-addrow tb-addcol"><textarea id="tbl-txt-'+c.id+'" placeholder="Escribe…" rows="2"></textarea><button class="tb-addbtn wide" onclick="tbAddLibre(\''+c.id+'\')">＋ Añadir</button></div>';
+}
+function renderTablon(){ const box=document.getElementById('tablon'); if(!box)return;
+  box.innerHTML=DB.tablon.map(c=>'<div class="tb-card"><div class="tb-head"><input class="tb-title" value="'+esc(c.title)+'" onchange="tbRename(\''+c.id+'\',this.value)"><span class="tb-del" title="Eliminar tarjeta" onclick="tbDelCard(\''+c.id+'\')">×</span></div><div class="tb-items">'+tbItemsHtml(c)+'</div>'+tbAddRowHtml(c)+'</div>').join('')
+    +'<div class="tb-newcard"><div class="tb-newlabel">Nueva tarjeta</div><button class="btn btn-sm" onclick="tbAddCard(\'contactos\')">Contactos</button><button class="btn btn-sm" onclick="tbAddCard(\'textos\')">Textos útiles</button><button class="btn btn-sm" onclick="tbAddCard(\'libre\')">Libre</button></div>'; }
+
+/* ===== PRODUCCIÓN DEL DÍA (tickets por marca + timeouts) ===== */
+function renderProd(){ const box=document.getElementById('prod-day'); if(!box)return; const p=dayProd(selDate); const tot=prodTicketsTotal(p);
+  box.innerHTML='<div class="prod-row"><span class="prod-lbl">Tickets hechos</span><div class="prod-marcas">'+
+    TK_MARCAS.map(m=>'<div class="prod-m"><span class="prod-mn">'+m+'</span><button class="prod-b" onclick="prodTk(\''+m+'\',-1)">−</button><input type="number" min="0" inputmode="numeric" class="prod-v" id="prod-'+m+'" value="'+p.tickets[m]+'" onchange="prodSetTk(\''+m+'\',this.value)" onfocus="this.select()"><button class="prod-b" onclick="prodTk(\''+m+'\',1)">+</button></div>').join('')+
+    '</div><span class="prod-tot">Total: <b id="prod-tk-tot">'+tot+'</b></span></div>'+
+    '<div class="prod-row"><span class="prod-lbl">Timeouts hechos</span><div class="prod-to"><button class="prod-b" onclick="prodTo(-1)">−</button><input type="number" min="0" inputmode="numeric" class="prod-v" id="prod-to" value="'+p.timeouts+'" onchange="prodSetTo(this.value)" onfocus="this.select()"><button class="prod-b" onclick="prodTo(1)">+</button></div></div>'; }
+function prodVal(v){ const n=parseInt(v,10); return isNaN(n)||n<0?0:n; }
+function prodTk(m,d){ const p=dayProd(selDate); p.tickets[m]=Math.max(0,(p.tickets[m]||0)+d); saveDB(); renderProd(); renderResumen(); }
+function prodSetTk(m,v){ const p=dayProd(selDate); p.tickets[m]=prodVal(v); saveDB(); renderProd(); renderResumen(); }
+function prodTo(d){ const p=dayProd(selDate); p.timeouts=Math.max(0,(p.timeouts||0)+d); saveDB(); renderProd(); renderResumen(); }
+function prodSetTo(v){ const p=dayProd(selDate); p.timeouts=prodVal(v); saveDB(); renderProd(); renderResumen(); }
+
 /* ===== init ===== */
-function renderAll(){ renderHor(); renderNotes(); renderPaseSelect(); renderTicketSelect(); renderTasks(); renderLinks(); }
+function renderAll(){ renderHor(); renderNotes(); renderPaseSelect(); renderTicketSelect(); renderTasks(); renderLinks(); renderTablon(); renderProd(); }
 initLock(); loadTheme(); loadDB(); renderAll(); askNotif(); scheduleDescanso(); syncInit();
 document.getElementById('ov-day').addEventListener('click',e=>{ if(e.target.id==='ov-day')closeDay(); });
 document.getElementById('ov-tpl').addEventListener('click',e=>{ if(e.target.id==='ov-tpl')closeTemplates(); });
@@ -1594,6 +1719,8 @@ document.getElementById('ov-link').addEventListener('click',e=>{ if(e.target.id=
 document.getElementById('ov-cats').addEventListener('click',e=>{ if(e.target.id==='ov-cats')closeCats(); });
 document.getElementById('ov-cat').addEventListener('click',e=>{ if(e.target.id==='ov-cat')closeCatEditor(); });
 document.getElementById('ov-calc').addEventListener('click',e=>{ if(e.target.id==='ov-calc')closeCalc(); });
+document.getElementById('ov-noteedit').addEventListener('click',e=>{ if(e.target.id==='ov-noteedit')closeNoteEditor(); });
+document.getElementById('ov-archive').addEventListener('click',e=>{ if(e.target.id==='ov-archive')closeArchive(); });
 document.getElementById('ov-search').addEventListener('click',e=>{ if(e.target.id==='ov-search')closeSearch(); });
 document.getElementById('ov-tpledit').addEventListener('click',e=>{ if(e.target.id==='ov-tpledit')closeTplEdit(); });
 document.getElementById('ov-estedit').addEventListener('click',e=>{ if(e.target.id==='ov-estedit')closeEstEdit(); });
