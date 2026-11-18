@@ -244,14 +244,14 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 .menubar{position:sticky;top:0;z-index:150;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);box-shadow:var(--shadow);padding:8px 12px;margin-bottom:14px;border-radius:10px}
 .menu-grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 /* ===== filas nuevas ===== */
-.main-layout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:16px;align-items:start}
+.main-layout{display:grid;grid-template-columns:minmax(0,1fr) 875px;gap:16px;align-items:start}
 .main-left{display:flex;flex-direction:column;gap:16px;min-width:0}
 .col-work{display:flex;flex-direction:column;gap:16px;min-width:0}
 .notes-col{position:sticky;top:60px;max-height:calc(100vh - 72px);overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:14px;min-width:0;padding-right:3px}
 .notes-col::-webkit-scrollbar{width:8px}
 .notes-col::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
 .main-layout .card{margin-bottom:0}
-@media(max-width:1000px){.main-layout{grid-template-columns:1fr}.notes-col{position:static;max-height:none;overflow:visible}}
+@media(max-width:1250px){.main-layout{grid-template-columns:1fr}.notes-col{position:static;max-height:none;overflow:visible}}
 /* ===== tablón ===== */
 .tb-card{display:flex;flex-direction:column;gap:6px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--white);box-shadow:var(--shadow)}
 .tb-head{display:flex;align-items:center;gap:6px}
@@ -1031,7 +1031,10 @@ function renderHoy(){
     '<span style="flex:1"></span>'+
     '<button class="btn btn-sm" onclick="openDay(\''+today+'\')">Editar hoy</button>';
 }
-function horShift(n){ const d=parseISO(horRef); if(horView==='month')d.setMonth(d.getMonth()+n); else d.setDate(d.getDate()+n*7); horRef=isoLocal(d); renderHor(); }
+function horShift(n){ const d=parseISO(horRef), s=parseISO(selDate);
+  if(horView==='month'){ d.setMonth(d.getMonth()+n); s.setMonth(s.getMonth()+n); }
+  else { d.setDate(d.getDate()+n*7); s.setDate(s.getDate()+n*7); }
+  horRef=isoLocal(d); selDate=isoLocal(s); renderHor(); renderTasks(); }
 function horToday(){ horRef=isoLocal(new Date()); selDate=isoLocal(new Date()); renderHor(); renderTasks(); }
 function goToday(){ horToday(); if(typeof resToday==='function')resToday(); }
 function setHorView(v){ horView=v; document.getElementById('vw-week').classList.toggle('on',v==='week'); document.getElementById('vw-month').classList.toggle('on',v==='month'); renderHor(); }
