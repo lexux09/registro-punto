@@ -244,12 +244,14 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
 .menubar{position:sticky;top:0;z-index:150;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);box-shadow:var(--shadow);padding:8px 12px;margin-bottom:14px;border-radius:10px}
 .menu-grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 /* ===== filas nuevas ===== */
-.notes-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start;margin-bottom:16px}
-.work-row{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start}
+.main-layout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:16px;align-items:start}
+.main-left{display:flex;flex-direction:column;gap:16px;min-width:0}
 .col-work{display:flex;flex-direction:column;gap:16px;min-width:0}
-.notes-row .card,.work-row .card{margin-bottom:0}
-@media(max-width:1100px){.notes-row{grid-template-columns:1fr 1fr}.work-row{grid-template-columns:1fr}}
-@media(max-width:720px){.notes-row{grid-template-columns:1fr}}
+.notes-col{position:sticky;top:60px;max-height:calc(100vh - 72px);overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:14px;min-width:0;padding-right:3px}
+.notes-col::-webkit-scrollbar{width:8px}
+.notes-col::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.main-layout .card{margin-bottom:0}
+@media(max-width:1000px){.main-layout{grid-template-columns:1fr}.notes-col{position:static;max-height:none;overflow:visible}}
 /* ===== tablón ===== */
 .tb-card{display:flex;flex-direction:column;gap:6px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--white);box-shadow:var(--shadow)}
 .tb-head{display:flex;align-items:center;gap:6px}
@@ -401,31 +403,9 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
     </div>
   </div>
 
-  <!-- ===== FILA DE NOTAS: Día · Generales · Tablón ===== -->
-  <div class="notes-row">
-    <div class="card">
-      <h2>Notas del día <span class="hint" id="daynotes-date" style="margin-left:6px"></span></h2>
-      <div class="note-list drop-zone" id="day-notes" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,false)"></div>
-    </div>
-    <div class="card">
-      <h2>Notas generales</h2>
-      <div id="gen-tagbar"></div>
-      <div class="note-list drop-zone" id="gen-pend" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,true)"></div>
-    </div>
-    <div class="card">
-      <div class="tb-links-head"><h2>Tablón</h2>
-        <div class="tb-newbtns">
-          <button class="btn btn-sm" onclick="tbAddCard('contactos')">＋ Contactos</button>
-          <button class="btn btn-sm" onclick="tbAddCard('textos')">＋ Textos</button>
-          <button class="btn btn-sm" onclick="tbAddCard('libre')">＋ Libre</button>
-        </div>
-      </div>
-      <div class="note-list" id="tablon"></div>
-    </div>
-  </div>
-
-  <!-- ===== FILA DE TRABAJO: Horario · (Producción + Tareas de hoy) ===== -->
-  <div class="work-row">
+  <!-- ===== CUERPO: izquierda (trabajo) · derecha (columna fija de notas) ===== -->
+  <div class="main-layout">
+  <div class="main-left">
     <div class="card">
       <h2>Horario de trabajo</h2>
       <div class="wk-nav">
@@ -484,7 +464,31 @@ label.fld{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.
         <div id="task-trash" style="display:none"></div>
       </div>
     </div>
-  </div>
+  </div><!-- /main-left -->
+
+  <!-- Columna fija (sticky) solo para notas -->
+  <aside class="notes-col">
+    <div class="card">
+      <h2>Notas del día <span class="hint" id="daynotes-date" style="margin-left:6px"></span></h2>
+      <div class="note-list drop-zone" id="day-notes" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,false)"></div>
+    </div>
+    <div class="card">
+      <h2>Notas generales</h2>
+      <div id="gen-tagbar"></div>
+      <div class="note-list drop-zone" id="gen-pend" ondragover="noteContOver(event)" ondragleave="this.classList.remove('dz-over')" ondrop="noteDropContainer(event,true)"></div>
+    </div>
+    <div class="card">
+      <div class="tb-links-head"><h2>Tablón</h2>
+        <div class="tb-newbtns">
+          <button class="btn btn-sm" onclick="tbAddCard('contactos')">＋ Contactos</button>
+          <button class="btn btn-sm" onclick="tbAddCard('textos')">＋ Textos</button>
+          <button class="btn btn-sm" onclick="tbAddCard('libre')">＋ Libre</button>
+        </div>
+      </div>
+      <div class="note-list" id="tablon"></div>
+    </div>
+  </aside>
+  </div><!-- /main-layout -->
 </div>
 
 <!-- ===== MODAL EDITAR DÍA ===== -->
